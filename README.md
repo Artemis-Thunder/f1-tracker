@@ -6,7 +6,8 @@
 [![CSS3](https://img.shields.io/badge/CSS3-Modern_Grid_%26_Flex-1572B6?style=for-the-badge&logo=css3&logoColor=white)](#)
 [![OpenF1 API](https://img.shields.io/badge/Data-OpenF1_API-00B4D8?style=for-the-badge)](#)
 
-A high-performance, real-time Formula 1 session replay and telemetry dashboard built from scratch with pure JavaScript and HTML5 Canvas — zero dependencies, zero build steps. Replay any F1 Grand Prix session (Race, Qualifying, Sprint) across recent seasons with interactive driver tracking, telemetry metrics, and race control events.
+> **Ever wondered while watching F1:** *"What if I could see the entire track and every live position for free?"*  
+> Well, here it is! **F1 Pulse** is a lightweight, zero-dependency Formula 1 race replay and telemetry pit wall built with pure JavaScript and HTML5 Canvas. Stream live GPS radar, driver throttle/brake inputs, tire stints, and race control events straight to your screen without any paywalls or subscriptions.
 
 ---
 
