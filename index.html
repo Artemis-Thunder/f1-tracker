@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 - Race Tracker</title>
+    <meta name="description" content="Real-time Formula 1 race tracker with live circuit visualization, driver positions, and telemetry data powered by OpenF1 API.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏎️</text></svg>">
+    <meta property="og:title" content="F1 - Race Tracker">
+    <meta property="og:description" content="Real-time Formula 1 race tracker with live circuit visualization, driver positions, and telemetry data powered by OpenF1 API.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Session Picker Modal -->
+    <div id="session-picker" class="session-picker">
+        <div class="picker-content">
+            <div class="picker-logo">
+                <span class="logo-f">F</span><span class="logo-1">1</span>
+                <span class="logo-pulse">TRACKER</span>
+            </div>
+            <p class="picker-subtitle">Select a session to replay</p>
+
+            <div class="picker-steps">
+                <!-- Step 1: Year -->
+                <div class="picker-step" id="step-year">
+                    <label class="picker-label">Season</label>
+                    <div class="picker-options" id="year-options"></div>
+                </div>
+
+                <!-- Step 2: Grand Prix -->
+                <div class="picker-step disabled" id="step-gp">
+                    <label class="picker-label">Grand Prix</label>
+                    <div class="picker-options" id="gp-options">
+                        <p class="picker-hint">Select a season first</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Session -->
+                <div class="picker-step disabled" id="step-session">
+                    <label class="picker-label">Session</label>
+                    <div class="picker-options" id="session-options">
+                        <p class="picker-hint">Select a Grand Prix first</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading bar (shown after session is picked) -->
+            <div class="picker-loading hidden" id="picker-loading">
+                <div class="loader-bar">
+                    <div class="loader-fill" id="loader-fill"></div>
+                </div>
+                <p class="loader-text" id="loader-text">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header" id="header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">🏎️</span>
+                    <span class="logo-text">F1<span class="accent">PULSE</span></span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="session-info" id="session-info">
+                    <div class="session-flag" id="session-flag"></div>
+                    <div class="session-details">
+                        <h1 class="session-name" id="session-name">Loading...</h1>
+                        <p class="session-type" id="session-type">—</p>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="change-session-btn" id="change-session-btn" title="Change Session">
+                    🔄 Change Session
+                </button>
+                <div class="live-indicator" id="live-indicator">
+                    <span class="live-dot"></span>
+                    <span>REPLAY</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-layout">
+            <!-- Left Panel — Standings -->
+            <aside class="panel panel-left" id="panel-left">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">🏆</span> Race Standings
+                    </h2>
+                    <div class="lap-counter" id="lap-counter">
+                        LAP <span id="current-lap">—</span> / <span id="total-laps">—</span>
+                    </div>
+                </div>
+                <div class="standings-list" id="standings-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </aside>
+
+            <!-- Center — Track Map -->
+            <section class="track-section" id="track-section">
+                <div class="track-container" id="track-container">
+                    <canvas id="track-canvas"></canvas>
+                    <div class="track-overlay" id="track-overlay">
+                        <!-- Driver dots rendered here -->
+                    </div>
+                    <div class="track-info-badge" id="track-info-badge">
+                        <span id="circuit-name">—</span>
+                    </div>
+                </div>
+                <!-- Playback Controls -->
+                <div class="playback-controls" id="playback-controls">
+                    <button class="play-btn" id="play-btn" title="Play/Pause">
+                        <span id="play-icon">▶</span>
+                    </button>
+                    <div class="timeline-container">
+                        <input type="range" id="timeline-slider" class="timeline-slider" min="0" max="100" value="0" step="0.1">
+                        <div class="timeline-time">
+                            <span id="time-current">00:00</span>
+                            <span id="time-total">00:00</span>
+                        </div>
+                    </div>
+                    <div class="speed-control">
+                        <button class="speed-btn" id="speed-btn" title="Playback Speed">1x</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel — Telemetry -->
+            <aside class="panel panel-right" id="panel-right">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="panel-icon">📊</span> Telemetry
+                    </h2>
+                </div>
+                <div class="driver-focus" id="driver-focus">
+                    <p class="no-selection">Click a driver to view telemetry</p>
+                </div>
+                
+                <!-- Weather Widget -->
+                <div class="weather-widget" id="weather-widget">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="panel-icon">🌤️</span> Weather
+                        </h2>
+                    </div>
+                    <div class="weather-grid" id="weather-grid">
+                        <div class="weather-item">
+                            <span class="weather-label">Air</span>
+                            <span class="weather-value" id="w-air">—°C</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-label">Track</span>
+                            <span class="weather-value" id="w-track">—°C</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-label">Humidity</span>
+                            <span class="weather-value" id="w-humidity">—%</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-label">Wind</span>
+                            <span class="weather-value" id="w-wind">— km/h</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-label">Rain</span>
+                            <span class="weather-value" id="w-rain">—</span>
+                        </div>
+                        <div class="weather-item">
+                            <span class="weather-label">Pressure</span>
+                            <span class="weather-value" id="w-pressure">— hPa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Race Control -->
+                <div class="race-control-widget" id="race-control-widget">
+                    <div class="panel-header">
+                        <h2 class="panel-title">
+                            <span class="panel-icon">🚩</span> Race Control
+                        </h2>
+                    </div>
+                    <div class="race-control-feed" id="race-control-feed">
+                        <p class="no-messages">No messages</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
