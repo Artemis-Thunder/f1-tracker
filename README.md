@@ -1,13 +1,13 @@
-# 🏎️ F1 Pulse — Live Race Tracker & Telemetry Dashboard
+# 🏎️ F1 Dot Tracker — Live Race Tracker & Telemetry Dashboard
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-e10600?style=for-the-badge&logo=formula1&logoColor=white)](https://artemis-thunder.github.io/f1-tracker/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-e10600?style=for-the-badge&logo=vercel&logoColor=white)](https://f1-dot-tracker.vercel.app/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](#)
 [![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas-E34F26?style=for-the-badge&logo=html5&logoColor=white)](#)
 [![CSS3](https://img.shields.io/badge/CSS3-Modern_Grid_%26_Flex-1572B6?style=for-the-badge&logo=css3&logoColor=white)](#)
 [![OpenF1 API](https://img.shields.io/badge/Data-OpenF1_API-00B4D8?style=for-the-badge)](#)
 
 > **Ever wondered while watching F1:** *"What if I could see the entire track and every live position for free?"*  
-> Well, here it is! **F1 Pulse** is a lightweight, zero-dependency Formula 1 race replay and telemetry pit wall built with pure JavaScript and HTML5 Canvas. Stream live GPS radar, driver throttle/brake inputs, tire stints, and race control events straight to your screen without any paywalls or subscriptions.
+> Well, here it is! **F1 Dot Tracker** is a lightweight, zero-dependency Formula 1 race replay and telemetry pit wall built with pure JavaScript and HTML5 Canvas. Stream live GPS radar, driver throttle/brake inputs, tire stints, and race control events straight to your screen without any paywalls or subscriptions.
 
 ---
 
